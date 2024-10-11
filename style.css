@@ -1,79 +1,75 @@
-/* Reset some default browser styles */
-body, h1, h2, h3, p, form, input, button {
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* Set a background color for the body */
-body {
     font-family: Arial, sans-serif;
+}
+
+body {
     background-color: #f4f4f4;
-    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Header styles */
-header {
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    padding: 20px; /* Some padding */
-    text-align: center; /* Center text */
-}
-
-/* Container to hold the form */
 .container {
-    max-width: 600px; /* Maximum width of the form */
-    margin: 20px auto; /* Center it horizontally */
-    padding: 20px; /* Some padding */
-    background-color: white; /* White background */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
 }
 
-/* Input and textarea styles */
-input[type="text"],
-input[type="date"],
-input[type="time"],
-textarea {
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding inside */
-    margin: 10px 0; /* Margin between elements */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 4px; /* Rounded corners */
+h1 {
+    text-align: center;
 }
 
-/* Button styles */
-button {
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    border: none; /* No border */
-    padding: 10px 15px; /* Padding */
-    text-align: center; /* Center text */
-    text-decoration: none; /* No underline */
-    display: inline-block; /* Inline block */
-    font-size: 16px; /* Font size */
-    margin: 10px 0; /* Margin */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth transition */
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-/* Change button color on hover */
-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+.occupied, .vacant {
+    width: 48%;
 }
 
-/* List styles */
 ul {
-    list-style-type: none; /* No bullet points */
-    padding: 0; /* Remove padding */
+    list-style: none;
+    padding: 0;
 }
 
 li {
-    padding: 10px; /* Padding for each list item */
-    border-bottom: 1px solid #eee; /* Light border */
+    padding: 10px;
+    background-color: #ececec;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
-li:last-child {
-    border-bottom: none; /* No border for the last item */
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
 }
