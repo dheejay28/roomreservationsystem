@@ -1,100 +1,98 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('login-form');
-    const adminDashboard = document.getElementById('admin-dashboard');
-    const guestDashboard = document.getElementById('guest-dashboard');
-    const loginScreen = document.getElementById('login-screen');
-    const roomList = document.getElementById('room-list');
-    const availableRooms = document.getElementById('available-rooms');
-    const roomSelect = document.getElementById('room-select');
-    const reservationMessage = document.getElementById('reservation-message');
-    const newRoomInput = document.getElementById('new-room');
-    const reserveDate = document.getElementById('reserve-date');
-
-    const users = {
-        admin: { password: 'admin123', role: 'admin' },
-        guest: { password: 'guest123', role: 'guest' }
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial room data
+    let rooms = {
+        "101": "Vacant", "102": "Vacant", "103": "Vacant", "104": "Vacant",
+        "201": "Vacant", "202": "Vacant", "203": "Vacant", "204": "Vacant",
+        "301": "Vacant", "302": "Vacant", "303": "Vacant"
     };
 
-    let rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+    let reservations = {}; // Store reservation details
 
-    function updateRoomList() {
-        roomList.innerHTML = '';
-        availableRooms.innerHTML = '';
-        roomSelect.innerHTML = '';
+    const occupiedList = document.getElementById('occupiedRooms');
+    const vacantList = document.getElementById('vacantRooms');
 
-        rooms.forEach((room, index) => {
-            const li = document.createElement('li');
-            li.textContent = `${room.name} - ${room.available ? 'Available' : 'Occupied'}`;
-            roomList.appendChild(li);
-
-            if (room.available) {
-                const liAvailable = document.createElement('li');
-                liAvailable.textContent = room.name;
-                availableRooms.appendChild(liAvailable);
-
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = room.name;
-                roomSelect.appendChild(option);
+    const updateRoomDisplay = () => {
+        occupiedList.innerHTML = '';
+        vacantList.innerHTML = '';
+        for (let room in rooms) {
+            let listItem = document.createElement('li');
+            if (rooms[room] === "Occupied") {
+                listItem.textContent = `Room ${room} - Reservation Code: ${reservations[room].code}`;
+                occupiedList.appendChild(listItem);
+            } else {
+                listItem.textContent = `Room ${room}`;
+                vacantList.appendChild(listItem);
             }
-        });
-    }
+        }
+    };
 
-    function login(username, password) {
-        const user = users[username];
-        if (user && user.password === password) {
-            if (user.role === 'admin') {
-                loginScreen.style.display = 'none';
-                adminDashboard.style.display = 'block';
-                updateRoomList();
-            } else if (user.role === 'guest') {
-                loginScreen.style.display = 'none';
-                guestDashboard.style.display = 'block';
-                updateRoomList();
-            }
+    // Generate a random reservation code
+    const generateReservationCode = () => {
+        return Math.random().toString(36).substring(2, 10).toUpperCase();
+    };
+
+    // Handle room reservation
+    document.getElementById('reserveForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const roomNumber = document.getElementById('roomNumber').value;
+        const section = document.getElementById('section').value;
+        const time = document.getElementById('time').value;
+        const date = document.getElementById('date').value;
+
+        if (rooms[roomNumber] === "Vacant") {
+            let code = generateReservationCode();
+            rooms[roomNumber] = "Occupied";
+            reservations[roomNumber] = { section, time, date, code };
+            alert(`Room reserved successfully. Your reservation code is ${code}`);
         } else {
-            document.getElementById('login-message').textContent = 'Invalid username or password!';
+            alert('Room is already occupied!');
         }
-    }
 
-    loginForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        login(username, password);
+        updateRoomDisplay();
     });
 
-    document.getElementById('logout-admin').addEventListener('click', function () {
-        adminDashboard.style.display = 'none';
-        loginScreen.style.display = 'block';
-    });
+    // Handle room return
+    document.getElementById('returnForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const roomNumber = document.getElementById('returnRoomNumber').value;
+        const reservationCode = document.getElementById('reservationCode').value;
 
-    document.getElementById('logout-guest').addEventListener('click', function () {
-        guestDashboard.style.display = 'none';
-        loginScreen.style.display = 'block';
-    });
-
-    document.getElementById('add-room').addEventListener('click', function () {
-        const roomName = newRoomInput.value;
-        if (roomName) {
-            rooms.push({ name: roomName, available: true });
-            localStorage.setItem('rooms', JSON.stringify(rooms));
-            updateRoomList();
-            newRoomInput.value = '';
-        }
-    });
-
-    document.getElementById('reserve-room').addEventListener('click', function () {
-        const selectedRoomIndex = roomSelect.value;
-        if (selectedRoomIndex !== '' && reserveDate.value !== '') {
-            rooms[selectedRoomIndex].available = false;
-            localStorage.setItem('rooms', JSON.stringify(rooms));
-            updateRoomList();
-            reservationMessage.textContent = `Room reserved successfully for ${reserveDate.value}!`;
+        if (rooms[roomNumber] === "Occupied" && reservations[roomNumber].code === reservationCode) {
+            rooms[roomNumber] = "Vacant";
+            delete reservations[roomNumber];
+            alert(`Room ${roomNumber} has been returned.`);
         } else {
-            reservationMessage.textContent = 'Please select a room and date!';
+            alert('Invalid reservation code or room is not occupied!');
+        }
+
+        updateRoomDisplay();
+    });
+
+    // Handle admin login to add a new room
+    document.getElementById('adminLoginBtn').addEventListener('click', () => {
+        const adminUsername = prompt("Enter Admin Username:");
+        const adminPassword = prompt("Enter Admin Password:");
+
+        if (adminUsername === 'admin' && adminPassword === 'password123') {
+            document.getElementById('addRoomForm').style.display = 'block';
+        } else {
+            alert('Invalid admin credentials!');
         }
     });
 
-    updateRoomList();
+    // Handle adding a new room
+    document.getElementById('addRoomForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newRoomNumber = document.getElementById('newRoomNumber').value;
+
+        if (!rooms[newRoomNumber]) {
+            rooms[newRoomNumber] = "Vacant";
+            alert(`Room ${newRoomNumber} added successfully.`);
+            updateRoomDisplay();
+        } else {
+            alert('Room already exists!');
+        }
+    });
+
+    updateRoomDisplay();
 });
