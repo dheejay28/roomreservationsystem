@@ -7,40 +7,50 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="login-screen">
-        <h2>Login</h2>
-        <form id="login-form">
-            <input type="text" id="username" placeholder="Username" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit">Login</button>
-        </form>
-        <p id="login-message"></p>
-    </div>
 
-    <!-- Admin Dashboard -->
-    <div id="admin-dashboard" style="display:none;">
-        <h1>Admin Dashboard</h1>
-        <button id="logout-admin">Logout</button>
-        <h2>Manage Rooms</h2>
-        <ul id="room-list"></ul>
-        <input type="text" id="new-room" placeholder="Enter room name">
-        <button id="add-room">Add Room</button>
-    </div>
+    <div class="container">
+        <h1>Room Reservation System</h1>
 
-    <!-- Guest Dashboard -->
-    <div id="guest-dashboard" style="display:none;">
-        <h1>Guest Dashboard</h1>
-        <button id="logout-guest">Logout</button>
-        <h2>Available Rooms</h2>
-        <ul id="available-rooms"></ul>
-        <h2>Reserve a Room</h2>
-        <label for="room-select">Select Room:</label>
-        <select id="room-select"></select><br><br>
-        <label for="reserve-date">Select Date:</label>
-        <input type="date" id="reserve-date"><br><br>
-        <button id="reserve-room">Reserve Room</button>
-        <p id="reservation-message"></p>
+        <div class="dashboard">
+            <div class="occupied">
+                <h2>Occupied Rooms</h2>
+                <ul id="occupiedRooms"></ul>
+            </div>
+
+            <div class="vacant">
+                <h2>Vacant Rooms</h2>
+                <ul id="vacantRooms"></ul>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Reserve a Room</h2>
+            <form id="reserveForm">
+                <input type="text" id="roomNumber" placeholder="Room Number" required>
+                <input type="text" id="section" placeholder="Section" required>
+                <input type="time" id="time" placeholder="Time" required>
+                <input type="date" id="date" placeholder="Date" required>
+                <button type="submit">Reserve Room</button>
+            </form>
+        </div>
+
+        <div class="return-section">
+            <h2>Return a Room</h2>
+            <form id="returnForm">
+                <input type="text" id="returnRoomNumber" placeholder="Room Number" required>
+                <input type="text" id="reservationCode" placeholder="Reservation Code" required>
+                <button type="submit">Return Room</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h2>Admin: Add New Room</h2>
+            <button id="adminLoginBtn">Admin Login</button>
+            <form id="addRoomForm" style="display: none;">
+                <input type="text" id="newRoomNumber" placeholder="New Room Number" required>
+                <button type="submit">Add Room</button>
+            </form>
+        </div>
     </div>
 
     <script src="script.js"></script>
